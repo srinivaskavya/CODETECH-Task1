@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Strength Checker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .feedback {
+            margin-top: 10px;
+        }
+        .strong {
+            color: green;
+        }
+        .moderate {
+            color: orange;
+        }
+        .weak {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Password Strength Checker</h1>
+
+    <label for="password">Enter your password:</label><br>
+    <input type="password" id="password" oninput="assessPasswordStrength()" placeholder="Enter password" style="width: 300px;"><br>
+
+    <div class="feedback" id="feedback"></div>
+
+    <script>
+        function assessPasswordStrength() {
+            const password = document.getElementById('password').value;
+            const feedbackDiv = document.getElementById('feedback');
+            let strength = 0;
+            let feedback = [];
+
+            // Define the strength criteria
+            const lengthCriteria = password.length >= 8;
+            const lowerCriteria = /[a-z]/.test(password);
+            const upperCriteria = /[A-Z]/.test(password);
+            const digitCriteria = /[0-9]/.test(password);
+            const specialCriteria = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+            // Evaluate the password strength
+            if (lengthCriteria) {
+                strength += 1;
+            } else {
+                feedback.push("Password should be at least 8 characters long.");
+            }
+
+            if (lowerCriteria) {
+                strength += 1;
+            } else {
+                feedback.push("Password should contain at least one lowercase letter.");
+            }
+
+            if (upperCriteria) {
+                strength += 1;
+            } else {
+                feedback.push("Password should contain at least one uppercase letter.");
+            }
+
+            if (digitCriteria) {
+                strength += 1;
+            } else {
+                feedback.push("Password should contain at least one digit.");
+            }
+
+            if (specialCriteria) {
+                strength += 1;
+            } else {
+                feedback.push("Password should contain at least one special character.");
+            }
+
+            // Display feedback
+            feedbackDiv.innerHTML = `<p>Password Strength: ${strength}/5</p>`;
+            feedback.forEach(function(msg) {
+                feedbackDiv.innerHTML += `<p>${msg}</p>`;
+            });
+
+            // Determine the strength level
+            if (strength === 5) {
+                feedbackDiv.innerHTML += `<p class="strong">Strong password.</p>`;
+            } else if (strength >= 3) {
+                feedbackDiv.innerHTML += `<p class="moderate">Moderate password. Consider improving strength.</p>`;
+            } else {
+                feedbackDiv.innerHTML += `<p class="weak">Weak password. Consider adding more complexity.</p>`;
+            }
+        }
+    </script>
+
+</body>
+</html>
